@@ -16,6 +16,7 @@ builder.Services.AddScoped<IRepository<Platform>, PlatformRepository>();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    Prep.Populate(app);
 }
 
 app.UseHttpsRedirection();
