@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PlatformService.Data;
+using PlatformService.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 builder.Services.AddDbContext<PlatformDbContext>(options => options.UseInMemoryDatabase("InMemory"));
+builder.Services.AddScoped<IRepository<Platform>, PlatformRepository>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
