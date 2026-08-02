@@ -16,6 +16,8 @@ builder.Services.AddScoped<IRepository<Platform>, PlatformRepository>();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
     Prep.Populate(app);
 }
 
