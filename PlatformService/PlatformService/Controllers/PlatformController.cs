@@ -3,12 +3,13 @@ using PlatformService.Data;
 using PlatformService.Dto;
 using PlatformService.Extensions;
 using PlatformService.Models;
+using PlatformService.SyncDataServices.Http;
 
 namespace PlatformService.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PlatformController(IRepository<Platform> repository) : ControllerBase
+public class PlatformController(IRepository<Platform> repository, ICommandDataClient commandClient) : ControllerBase
 {
     [HttpGet]
     public ActionResult<IEnumerable<PlatformResponseDto>> GetAll()
@@ -28,11 +29,23 @@ public class PlatformController(IRepository<Platform> repository) : ControllerBa
     }
 
     [HttpPost]
-    public ActionResult<PlatformResponseDto> Create([FromBody] PlatformCreateDto dto)
+    public async Task<ActionResult<PlatformResponseDto>> Create([FromBody] PlatformCreateDto dto)
     {
         var platform = Platform.ToPlatform(dto);
         repository.Add(platform);
         repository.SaveChanges();
-        return CreatedAtAction(nameof(Get), new { id = platform.Id }, platform.ToResponseDto());
+
+        var response = platform.ToResponseDto();
+
+        try
+        {
+            await commandClient.SendPlatformToCommandService(response);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error while sending the platform. Exception: {e.Message}");
+        }
+
+        return CreatedAtAction(nameof(Get), new { id = platform.Id }, response);
     }
 }

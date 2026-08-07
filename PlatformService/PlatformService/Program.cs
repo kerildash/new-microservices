@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using PlatformService.Data;
 using PlatformService.Models;
+using PlatformService.SyncDataServices.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<PlatformDbContext>(options => options.UseInMemoryDatabase("InMemory"));
 builder.Services.AddScoped<IRepository<Platform>, PlatformRepository>();
+
+builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 
 var app = builder.Build();
 

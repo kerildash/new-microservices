@@ -9,6 +9,7 @@ public static class PlatformExtensions
     {
         public PlatformResponseDto ToResponseDto() => new PlatformResponseDto()
         {
+            Id = platform.Id,
             Name = platform.Name,
             Publisher = platform.Publisher,
         };
