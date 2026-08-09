@@ -3,8 +3,12 @@ using PlatformService.Data;
 using PlatformService.Data.Helpers;
 using PlatformService.Models;
 using PlatformService.SyncDataServices.Http;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -44,8 +48,9 @@ static string BuildConnectionString()
     var userName = Environment.GetEnvironmentVariable("POSTGRES_USER");
     var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
 
-    var connectionString = $"Host={host};Port=5432;Database={databaseName};Username={userName};Password={password}";
-    Console.WriteLine($"Connection string: {connectionString}");
+    var connectionString =
+        $"Host={host};Port=5432;Database={databaseName};Username={userName};Password={password}";
+
     return connectionString;
 }
 
