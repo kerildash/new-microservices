@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seq
+  template:
+    metadata:
+      labels:
+        app: seq
+    spec:
+      containers:
+        - name: seq
+          image: datalust/seq:latest
+          env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SEQ_FIRSTRUN_NOAUTHENTICATION
+              value: "true"
+          ports:
+            - containerPort: 80
+              name: http
+            - containerPort: 5341
+              name: ingestion
+          volumeMounts:
+            - name: seq-data
+              mountPath: /data
+      volumes:
+        - name: seq-data
+          persistentVolumeClaim:
+            claimName: seq-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: seq-data
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 200Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seq-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: seq
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+    - name: ingestion
+      port: 5341
+      targetPort: 5341 
