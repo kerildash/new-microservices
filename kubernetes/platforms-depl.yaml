@@ -15,6 +15,12 @@ spec:
       containers:
         - name: platformservice
           image: kerildash/platformservice:latest
+          envFrom:
+            - secretRef:
+                name: postgres-secret
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-clusterip
 ---
 apiVersion: v1
 kind: Service
