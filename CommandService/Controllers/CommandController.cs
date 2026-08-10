@@ -2,7 +2,7 @@
 
 namespace CommandService.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/c/[controller]")]
 [ApiController]
 public class CommandController : ControllerBase
 {
