@@ -9,12 +9,16 @@ namespace PlatformService.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PlatformController(IRepository<Platform> repository, ICommandDataClient commandClient) : ControllerBase
+public class PlatformController(
+    IRepository<Platform> repository,
+    ICommandDataClient commandClient,
+    ILogger<PlatformController> logger) : ControllerBase
 {
     [HttpGet]
     public ActionResult<IEnumerable<PlatformResponseDto>> GetAll()
     {
         var platforms = repository.GetAll().Select(p => p.ToResponseDto());
+        logger.LogInformation("Returning {Count} platforms.", platforms.Count());
         return Ok(platforms);
     }
 
@@ -23,8 +27,12 @@ public class PlatformController(IRepository<Platform> repository, ICommandDataCl
     {
         var platform = repository.GetById(id)?.ToResponseDto();
         if (platform is null)
+        {
+            logger.LogInformation("No platform found with id {Id}.", id);
             return NotFound(id);
+        }
 
+        logger.LogInformation("Returning platform with id {Id}.", id);
         return Ok(platform);
     }
 
@@ -43,9 +51,10 @@ public class PlatformController(IRepository<Platform> repository, ICommandDataCl
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error while sending the platform. Exception: {e.Message}");
+            logger.LogError(e, "Error while sending the platform.");
         }
 
+        logger.LogInformation("New platform created with id {Id}.", platform.Id);
         return CreatedAtAction(nameof(Get), new { id = platform.Id }, response);
     }
 }
