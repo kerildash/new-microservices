@@ -8,7 +8,7 @@ namespace CommandService.Controllers;
 
 [ApiController]
 [Route("api/c/[controller]")]
-public class PlatformController(CommandDbContext context, Logger<PlatformController> logger) : ControllerBase
+public class PlatformController(CommandDbContext context, ILogger<PlatformController> logger) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PlatformResponseDto>>> GetAll()
