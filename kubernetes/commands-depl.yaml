@@ -16,9 +16,10 @@ spec:
         - name: commandservice
           image: kerildash/commandservice:latest
           envFrom:
-            - secretRef: postgres-secret;
+            - secretRef:
+                name: postgres-secret
           env:
-            - name: POSTGRES_HOST;
+            - name: POSTGRES_HOST
               value: postgres-clusterip
             - name: POSTGRES_DB
               value: commands
