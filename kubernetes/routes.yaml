@@ -9,7 +9,7 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /api/platform
+            value: /api/p
       backendRefs:
         - name: platforms-clusterip
           port: 80
@@ -25,7 +25,7 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /api/command
+            value: /api/c
       backendRefs:
         - name: commands-clusterip
           port: 80

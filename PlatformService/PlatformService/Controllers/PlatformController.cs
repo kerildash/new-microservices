@@ -2,16 +2,16 @@
 using PlatformService.Data;
 using PlatformService.Dto;
 using PlatformService.Extensions;
+using PlatformService.Integration.Messaging;
 using PlatformService.Models;
-using PlatformService.SyncDataServices.Http;
 
 namespace PlatformService.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/p/[controller]")]
 [ApiController]
 public class PlatformController(
     IRepository<Platform> repository,
-    ICommandDataClient commandClient,
+    IMessageBusClient messageBusClient,
     ILogger<PlatformController> logger) : ControllerBase
 {
     [HttpGet]
@@ -47,11 +47,12 @@ public class PlatformController(
 
         try
         {
-            await commandClient.SendPlatformToCommandService(response);
+            const string eventCause = "New platform created.";
+            await messageBusClient.PublishPlatform(platform.ToPublishDto(), eventCause);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error while sending the platform.");
+            logger.LogError(e, "Error while publishing the platform created message.");
         }
 
         logger.LogInformation("New platform created with id {Id}.", platform.Id);

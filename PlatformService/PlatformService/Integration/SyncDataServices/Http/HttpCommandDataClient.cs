@@ -2,7 +2,7 @@
 using System.Text.Json;
 using PlatformService.Dto;
 
-namespace PlatformService.SyncDataServices.Http;
+namespace PlatformService.Integration.SyncDataServices.Http;
 
 public class HttpCommandDataClient(HttpClient httpClient) : ICommandDataClient
 {
@@ -13,7 +13,7 @@ public class HttpCommandDataClient(HttpClient httpClient) : ICommandDataClient
             Encoding.UTF8,
             "application/json");
 
-        var response = await httpClient.GetAsync("http://commands-clusterip:80/api/command");
+        var response = await httpClient.GetAsync("http://commands-clusterip:80/api/c/command");
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("Platform sent successfully");

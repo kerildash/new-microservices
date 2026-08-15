@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using PlatformService.Data;
 using PlatformService.Data.Helpers;
+using PlatformService.Integration.Messaging;
+using PlatformService.Integration.SyncDataServices.Http;
 using PlatformService.Models;
-using PlatformService.SyncDataServices.Http;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PlatformDbContext>(options => options.UseNpgsql(BuildConnectionString()));
 builder.Services.AddScoped<IRepository<Platform>, PlatformRepository>();
 builder.Services.AddScoped<DatabasePreparationHelper>();
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
 builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 
@@ -38,7 +40,7 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 app.UseHttpsRedirection();
 
-app.Run();
+await app.RunAsync();
 return;
 
 static string BuildConnectionString()

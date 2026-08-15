@@ -7,17 +7,23 @@ public static class PlatformExtensions
 {
     extension(Platform platform)
     {
-        public PlatformResponseDto ToResponseDto() => new PlatformResponseDto()
+        public PlatformResponseDto ToResponseDto() => new()
         {
             Id = platform.Id,
             Name = platform.Name,
             Publisher = platform.Publisher,
         };
 
-        public static Platform ToPlatform(PlatformCreateDto dto) => new Platform()
+        public static Platform ToPlatform(PlatformCreateDto dto) => new()
         {
             Name = dto.Name,
             Publisher = dto.Publisher,
+        };
+
+        public PlatformPublishDto ToPublishDto() => new()
+        {
+            Id = platform.Id,
+            Name = platform.Name
         };
     }
 }
