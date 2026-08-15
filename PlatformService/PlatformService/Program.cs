@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PlatformService.Data;
 using PlatformService.Data.Helpers;
+using PlatformService.Integration.Messaging;
 using PlatformService.Integration.SyncDataServices.Http;
 using PlatformService.Models;
 using Serilog;
@@ -20,6 +21,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PlatformDbContext>(options => options.UseNpgsql(BuildConnectionString()));
 builder.Services.AddScoped<IRepository<Platform>, PlatformRepository>();
 builder.Services.AddScoped<DatabasePreparationHelper>();
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
 builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 
