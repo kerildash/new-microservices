@@ -4,5 +4,5 @@ namespace PlatformService.Integration.Messaging;
 
 public interface IMessageBusClient
 {
-    Task PublishPlatform(PlatformPublishDto platform);
+    Task PublishPlatform(PlatformPublishDto platform, string eventCause);
 }

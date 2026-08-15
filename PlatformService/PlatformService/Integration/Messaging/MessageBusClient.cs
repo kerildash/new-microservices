@@ -27,7 +27,7 @@ public sealed class MessageBusClient(
     private IConnection? _connection;
     private IChannel? _channel;
 
-    public async Task PublishPlatform(PlatformPublishDto platform)
+    public async Task PublishPlatform(PlatformPublishDto platform, string eventCause)
     {
         await EnsureChannelAsync();
 
@@ -42,7 +42,17 @@ public sealed class MessageBusClient(
 
             var message = JsonSerializer.Serialize(platform);
             var body = Encoding.UTF8.GetBytes(message);
-            await _channel.BasicPublishAsync(exchange: ExchangeName, routingKey: string.Empty, body: body);
+            await _channel.BasicPublishAsync(
+                exchange: ExchangeName,
+                routingKey: string.Empty,
+                mandatory: false,
+                body: body,
+                basicProperties: new BasicProperties { Type = eventCause });
+
+            logger.LogInformation(
+                "{Event} message was published for platform with ID: {ID}",
+                eventCause,
+                platform.Id);
         }
         finally
         {
@@ -68,6 +78,8 @@ public sealed class MessageBusClient(
             _connection = await _connectionFactory.CreateConnectionAsync();
             _channel = await _connection.CreateChannelAsync();
             await _channel.ExchangeDeclareAsync(type: ExchangeType.Fanout, exchange: ExchangeName);
+
+            logger.LogInformation("Connection and channel created. Exchange declared.");
         }
         finally
         {
