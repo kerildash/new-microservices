@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using PlatformService.Data;
 using PlatformService.Data.Helpers;
+using PlatformService.Integration.SyncDataServices.Http;
 using PlatformService.Models;
-using PlatformService.SyncDataServices.Http;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,7 +38,7 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 app.UseHttpsRedirection();
 
-app.Run();
+await app.RunAsync();
 return;
 
 static string BuildConnectionString()

@@ -2,8 +2,8 @@
 using PlatformService.Data;
 using PlatformService.Dto;
 using PlatformService.Extensions;
+using PlatformService.Integration.SyncDataServices.Http;
 using PlatformService.Models;
-using PlatformService.SyncDataServices.Http;
 
 namespace PlatformService.Controllers;
 
