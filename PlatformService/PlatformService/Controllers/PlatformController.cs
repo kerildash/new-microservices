@@ -47,7 +47,7 @@ public class PlatformController(
 
         try
         {
-            const string eventCause = "New platform created.";
+            const string eventCause = "PlatformCreated";
             await messageBusClient.PublishPlatform(platform.ToPublishDto(), eventCause);
         }
         catch (Exception e)
