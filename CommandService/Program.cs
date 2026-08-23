@@ -1,3 +1,4 @@
+using CommandService.Integration;
 using CommandService.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -16,6 +17,8 @@ public static class Program
         // Add services to the container.
         builder.Services.AddControllers();
         builder.Services.AddDbContext<CommandDbContext>(options => options.UseNpgsql(BuildConnectionString()));
+        builder.Services.AddSingleton<MessageHandler>();
+        builder.Services.AddHostedService<MessageBusSubscriber>();
 
         builder.Services.AddAuthorization();
 
@@ -23,7 +26,7 @@ public static class Program
         builder.Services.AddOpenApi();
 
         var app = builder.Build();
-        
+
         MigrateDatabase(app);
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

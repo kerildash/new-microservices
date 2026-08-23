@@ -12,5 +12,11 @@ public static class PlatformMappingExtensions
             Id = platform.Id,
             Name = platform.Name
         };
+
+        public static Platform FromReceivedDto(PlatformReceivedDto dto) => new()
+        {
+            Id = dto.Id,
+            Name = dto.Name,
+        };
     }
 }

@@ -16,6 +16,13 @@ public class CommandDbContext(DbContextOptions<CommandDbContext> options) : DbCo
             .WithOne(c => c.Platform)
             .HasForeignKey(c => c.PlatformId);
 
+        modelBuilder.Entity<Command>(e =>
+        {
+            e.Property(c => c.Line).IsRequired().HasMaxLength(250);
+            e.Property(c => c.Description).IsRequired().HasMaxLength(250);
+            e.HasIndex(c => c.PlatformId);
+        });
+        
         base.OnModelCreating(modelBuilder);
     }
 }
