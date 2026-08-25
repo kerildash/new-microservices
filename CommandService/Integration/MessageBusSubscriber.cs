@@ -52,7 +52,7 @@ public sealed class MessageBusSubscriber(
 
         await _channel.BasicConsumeAsync(queue: _queueName, autoAck: true, consumer, stoppingToken);
 
-        logger.LogInformation("listening on {Queue}", _queueName);
+        logger.LogInformation("Started to listen on \"{Queue}\" queue.", _queueName);
     }
 
     [MemberNotNull(nameof(_channel), nameof(_connection), nameof(_queueName))]
