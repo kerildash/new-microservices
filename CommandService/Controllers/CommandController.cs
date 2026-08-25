@@ -86,6 +86,9 @@ public class CommandController(CommandDbContext context, ILogger<CommandControll
         await context.SaveChangesAsync();
 
         logger.LogInformation("New command created.");
-        return CreatedAtAction(nameof(Get), new { commandId = command.Id }, command.ToResponseDto());
+        return CreatedAtAction(
+            nameof(Get),
+            new { platformId, commandId = command.Id },
+            command.ToResponseDto());
     }
 }
